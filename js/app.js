@@ -10,6 +10,7 @@ var Enemy = function () {
     this.sprite = 'images/enemy-bug.png';
     this.x = 0;
     this.y = bugStartPos[Math.floor(Math.random() * 3)];
+    this.speed = Math.floor((Math.random() * 500) + 50);
 
 }
 
@@ -19,7 +20,12 @@ Enemy.prototype.update = function(dt) {
     // You should multiply any movement by the dt parameter
     // which will ensure the game runs at the same speed for
     // all computers.
-    this.x += (20 * dt);
+    this.x += (this.speed * dt);
+
+    if (this.x > 525) {
+        this.x = 0;
+        this.y = bugStartPos[Math.floor(Math.random() * 3)];
+    }
 
 }
 
@@ -34,10 +40,12 @@ Enemy.prototype.render = function() {
 var Player = function () {
     this.sprite = 'images/char-boy.png';
     this.x = 200;
-    this.y = 200;
+    this.y = 401;
 }
 
 Player.prototype.update = function (dt) {
+    this.x * dt;
+    this.y * dt;
 
 }
 
@@ -45,7 +53,19 @@ Player.prototype.render = function () {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 }
 
-Player.prototype.handleInput = function () {
+Player.prototype.handleInput = function (keyPress) {
+    if (keyPress === 'left' && this.x > 0) {
+        this.x -= 101;
+    }
+    if (keyPress === 'right' && this.x < 350) {
+        this.x += 101;
+    }
+    if (keyPress === 'up' && this.y > 0) {
+        this.y -= 83;
+    }
+    if (keyPress === 'down' && this.y < 401) {
+        this.y += 83;
+    }
 
 }
 
