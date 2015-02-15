@@ -1,5 +1,5 @@
 // Enemies our player must avoid
-
+var scoreboard = document.getElementById('scoreboard');
 var bugStartPos = [60, 140, 226];
 var Enemy = function () {
     // Variables applied to each of our instances go here,
@@ -10,7 +10,7 @@ var Enemy = function () {
     this.sprite = 'images/enemy-bug.png';
     this.x = 0;
     this.y = bugStartPos[Math.floor(Math.random() * 3)];
-    this.speed = Math.floor((Math.random() * 500) + 50);
+    this.speed = Math.floor((Math.random() * 300) + 40);
 
 }
 
@@ -22,10 +22,11 @@ Enemy.prototype.update = function(dt) {
     // all computers.
     this.x += (this.speed * dt);
 
-    if (this.x > 525) {
-        this.x = 0;
+    if (this.x > 550) {
+        this.x = -50;
         this.y = bugStartPos[Math.floor(Math.random() * 3)];
     }
+    enemy.checkCollision();
 
 }
 
@@ -34,6 +35,16 @@ Enemy.prototype.render = function() {
     ctx.drawImage(Resources.get(this.sprite), this.x, this.y);
 }
 
+Enemy.prototype.checkCollision = function () {
+    for (var enemy in allEnemies) {
+        if ((allEnemies[enemy].x + 90 > player.x && allEnemies[enemy].x + 90 < player.x + 90 || allEnemies[enemy].x > player.x && allEnemies[enemy].x < player.x + 85) && (allEnemies[enemy].y + 85 > player.y && allEnemies[enemy].y + 85 < player.y + 85 )) {
+            console.log("collision detected");
+            player.lives--;
+            player.reset();
+        }
+    }
+
+}
 // Now write your own player class
 // This class requires an update(), render() and
 // a handleInput() method.
@@ -41,12 +52,27 @@ var Player = function () {
     this.sprite = 'images/char-boy.png';
     this.x = 200;
     this.y = 401;
+    this.lives = 3;
+    this.score = 0;
 }
-
+Player.prototype.reset = function () {
+    this.x = 200;
+    this.y = 401;
+}
 Player.prototype.update = function (dt) {
     this.x * dt;
     this.y * dt;
-
+    if (this.y < -10) {
+        this.score += 100;
+        console.log("You Scored!");
+        player.reset();
+    }
+    if (this.lives === 0) {
+        this.score = 0;
+        this.lives = 3;
+        player.reset();
+    }
+    scoreboard.innerHTML = "Score: " + this.score + "   Lives: " + this.lives;
 }
 
 Player.prototype.render = function () {
@@ -73,7 +99,7 @@ var enemy = new Enemy();
 var enemy2 = new Enemy();
 var enemy3 = new Enemy();
 
-var allEnemies = [enemy2, enemy3, enemy];
+var allEnemies = [enemy, enemy2, enemy3];
 
 var player = new Player();
 // Now instantiate your objects.
