@@ -25,6 +25,7 @@ Enemy.prototype.update = function(dt) {
     if (this.x > 550) {
         this.x = -50;
         this.y = bugStartPos[Math.floor(Math.random() * 3)];
+        this.speed = Math.floor((Math.random() * 300) + 40);
     }
     enemy.checkCollision();
 
@@ -38,7 +39,7 @@ Enemy.prototype.render = function() {
 Enemy.prototype.checkCollision = function () {
     for (var enemy in allEnemies) {
         if ((allEnemies[enemy].x + 90 > player.x && allEnemies[enemy].x + 90 < player.x + 90 || allEnemies[enemy].x > player.x && allEnemies[enemy].x < player.x + 85) && (allEnemies[enemy].y + 85 > player.y && allEnemies[enemy].y + 85 < player.y + 85 )) {
-            console.log("collision detected");
+            sound.play('sound/blast.wav');
             player.lives--;
             player.reset();
         }
@@ -64,7 +65,7 @@ Player.prototype.update = function (dt) {
     this.y * dt;
     if (this.y < -10) {
         this.score += 100;
-        console.log("You Scored!");
+        sound.play('sound/score.wav');
         player.reset();
     }
     if (this.lives === 0) {
@@ -80,6 +81,7 @@ Player.prototype.render = function () {
 }
 
 Player.prototype.handleInput = function (keyPress) {
+    sound.play('sound/jump.wav');
     if (keyPress === 'left' && this.x > 0) {
         this.x -= 101;
     }
@@ -94,6 +96,17 @@ Player.prototype.handleInput = function (keyPress) {
     }
 
 }
+
+var Sound = function () {
+    this.snd = document.getElementById("soundEfx");
+}
+Sound.prototype.play = function (src) {
+    this.snd.src = src;
+    this.snd.play();
+}
+
+var sound = new Sound();
+//var blastsnd = new Sound('sound/blast.wav');
 
 var enemy = new Enemy();
 var enemy2 = new Enemy();
