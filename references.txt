@@ -1,0 +1,9 @@
+References:
+
+http://www.w3schools.com/jsref/jsref_random.asp
+
+http://soundbible.com/
+
+http://www.onlywebpro.com/2012/03/10/html5-game-development-adding-sound-effects/
+
+http://webaudioplayground.appspot.com/
